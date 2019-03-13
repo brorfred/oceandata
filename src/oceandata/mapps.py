@@ -20,7 +20,7 @@ import pandas as pd
 
 import requests
 
-DATADIR = "/Users/bror/.oceandata/"
+DATADIR = os.path.expanduser("~/.oceandata/")
 FILENAME = "Bouman_2017.tab.tsv"
 pathlib.Path(DATADIR).mkdir(parents=True, exist_ok=True)
 
