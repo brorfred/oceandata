@@ -45,9 +45,10 @@ def load(filename=FILENAME):
 
 
 def download(url="https://doi.pangaea.de/10.1594/PANGAEA.874087",
-            params={"format":"textfile"}):
+            params={"format":"textfile"}, filename=None):
     """Download tsv file from Pangaea server"""
-    local_filename = os.path.join(DATADIR, FILENAME)
+    filename = FILENAME if filename is None else filename
+    local_filename = os.path.join(DATADIR, filename)
     try:
         r = requests.get(url, params=params, stream=True, timeout=2)
     except requests.ReadTimeout:
@@ -65,3 +66,19 @@ def download(url="https://doi.pangaea.de/10.1594/PANGAEA.874087",
             return None
     else:
         raise IOError("Could not download file from server")
+
+
+def download_pml(url="https://github.com/brorfred/oceandata/raw/master/data/",
+                filename="GLOBAL_PE_W_LOV_2019.csv", params={}):
+    """Download local PML version of MAPPS"""
+    download(url=f"{url}/{filename}", filename=filename, params=params)
+
+
+def load_pml(filename="GLOBAL_PE_W_LOV_2019.csv"):
+    fn = os.path.join(DATADIR, filename)
+    df = pd.read_csv(fn, parse_dates=[[4,5,6]], index_col="YEAR_MONTH_DAY")
+    df = df.rename(columns={"LAT":"lat", "LON":"lon", "DEPTH":"depth",
+                            "TEMP":"temp", "TCHL":"chl", "ALPHA":"alpha",
+                            'NITRATE':"NO3",'SILICATE':"Si4",'PHOSPHATE':"PO4",
+                            "PMB":"PBmax", "EK":"Ek","PROVNUM":"region"})
+    return df
