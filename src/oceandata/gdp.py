@@ -24,13 +24,15 @@ pathlib.Path(DATADIR).mkdir(parents=True, exist_ok=True)
 
 
 def read_dat(filename, sst=False, vel=False, var=False):
-    df = pd.read_csv(
-        filename, sep=" ", skipinitialspace=True, compression='gzip',
-        names=["id", "month", "day", "year", "lat", "lon", "sst", "vel_east",
-               "vel_north", "speed", "var_lat", "var_lon", "var_temp"])
+    df = pd.read_csv(filename, sep=" ", skipinitialspace=True,
+                     compression='gzip', na_values=999.999,
+                     names=["id", "month", "day", "year", "lat", "lon",
+                            "sst", "vel_east", "vel_north", "speed",
+                            "var_lat", "var_lon", "var_temp"])
     df["hour"] = ((df.day - df["day"].astype(int)) * 24).astype(np.int32)
     df.set_index(pd.to_datetime(df[["year","month","day","hour"]]),inplace=True)
     del df["year"], df["month"], df["day"], df["hour"]
+    df.loc[df["lon"]>180, "lon"] = df.loc[df["lon"]>180, "lon"] - 360
     if not sst:
         del df["sst"]
     if not vel:
@@ -38,7 +40,6 @@ def read_dat(filename, sst=False, vel=False, var=False):
     if not var:
         del df["var_lat"], df["var_lon"], df["var_temp"]
     return df
-
 
 def load(v1=None, sst=False, vel=False, var=False):
     """Load gzipped dat file to a pandas dataframe"""
@@ -64,12 +65,7 @@ def load(v1=None, sst=False, vel=False, var=False):
         download(v1=v1, v2=v2)
     df = read_dat(filename, sst=sst, vel=vel, var=var)
     df.to_hdf(h5filename, "df")
-
-
-#ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/buoydata_1_5000.dat.gz
-#ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/buoydata_5001_10000.dat.gz
-#ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/buoydata_10001_15000.dat.gz
-#ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/buoydata_15001_oct18.dat.gz
+    return df
 
 def vprint(text):
     pass
@@ -98,7 +94,7 @@ def download(url="ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/",
     with open(local_filename, 'wb') as lfh:
         ftp.voidcmd('TYPE I')
         length = ftp.size(lfn)
-        short_lfn = lfn if len(lfn)<18 else lfn[:9] + "..." + lfn[-9:]
+        short_lfn = lfn if len(lfn)<18 else lfn[:4] + "..." + lfn[-13:]
         with click.progressbar(length=length, label=short_lfn) as bar:
             def file_write(data):
                 lfh.write(data) 
