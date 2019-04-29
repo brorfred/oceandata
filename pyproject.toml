@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "oceandata"
-version = "0.1.1"
+version = "0.2.0"
 description = ""
 authors = ["Bror Jonsson <brorfred@gmail.com>"]
 
@@ -9,6 +9,7 @@ python = "^3.6"
 pandas = "^0.24.1"
 numpy = "^1.16"
 requests = "^2.21"
+click = "^7.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
