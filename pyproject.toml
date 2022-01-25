@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "oceandata"
-version = "0.2.4"
+version = "0.3"
 description = ""
 authors = ["Bror Jonsson <brorfred@gmail.com>"]
 
