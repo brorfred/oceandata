@@ -22,7 +22,6 @@ import click
 DATADIR = os.path.expanduser("~/.oceandata/")
 pathlib.Path(DATADIR).mkdir(parents=True, exist_ok=True)
 
-
 def read_dat(filename, sst=False, vel=False, var=False):
     df = pd.read_csv(filename, sep=" ", skipinitialspace=True,
                      compression='gzip', na_values=999.999,
@@ -55,7 +54,7 @@ def load(v1=None, sst=False, vel=False, var=False):
     elif v1 == 10001:
         v2 = 15000
     elif v1 == 15001:
-        v2 = "oct18"
+        v2 = "mar20"
     filename = os.path.join(DATADIR, f"buoydata_{v1}_{v2}.dat.gz")
     h5filename = filename[:-7] + ".h5"
     if os.path.isfile(h5filename):
@@ -71,10 +70,7 @@ def vprint(text):
     pass
     #print(text)
 
-def download(url="ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/",
-             v1="15001", v2="oct18"):
-    """Download tsv file from NOOA's website using ftp"""
-    lfn = filename = f"buoydata_{v1}_{v2}.dat.gz"
+def open_ftp_session(url="ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/"):
     spliturl = urlsplit(url)
     try:
         ftp = ftplib.FTP(spliturl.netloc) 
@@ -86,6 +82,15 @@ def download(url="ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/",
         print (spliturl.netloc)
         print (os.path.split(spliturl.path)[0])
         raise IOError(err)
+    return ftp
+
+def server_file_list(url="ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/", ftp=None):
+    pass
+
+def download(url="ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/"):
+    """Download tsv file from NOOA's website using ftp"""
+    lfn = filename = f"buoydata_{v1}_{v2}.dat.gz"
+    ftp = open_ftp_session(url=url)
 
     local_filename = os.path.join(DATADIR, filename)
     if not filename in ftp.nlst():
