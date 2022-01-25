@@ -2,11 +2,16 @@ from oceandata import __version__
 
 import tempfile
 
+import pandas as pd
 import oceandata
 
 def test_version():
     assert __version__ == '0.2.2'
 
+def assert_dataframe(df):
+    assert "lat" in df
+    assert "lon" in df
+    assert isinstance(df.index, pd.DatetimeIndex)
 
 def test_mapps_download():
     from oceandata import mapps
@@ -29,5 +34,11 @@ def test_mattei():
     df = mattei.load()
     with tempfile.TemporaryDirectory() as tmpdirname:
         df = mattei.load(datadir=tmpdirname)
-    assert "lat" in df
-    assert "lon" in df
+    assert_dataframe(df)
+
+def test_buitenhuis():
+    from oceandata.primary_production import buitenhuis
+    df = buitenhuis.load()
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        df = buitenhuis.load(datadir=tmpdirname)
+    assert_dataframe(df)
