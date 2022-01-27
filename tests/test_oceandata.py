@@ -6,7 +6,7 @@ import pandas as pd
 import oceandata
 
 def test_version():
-    assert __version__ == '0.3'
+    assert __version__ == '0.3.1'
 
 def assert_dataframe(df):
     assert "lat" in df
