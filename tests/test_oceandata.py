@@ -29,6 +29,13 @@ def test_mapps_load_pml():
     from oceandata import mapps
     df = mapps.load_pml()
 
+def test_valente():
+    from oceandata.chl import valente
+    df = valente.load()
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        df = valente.load(datadir=tmpdirname)
+    assert_dataframe(df)
+
 def test_mattei():
     from oceandata.primary_production import mattei
     df = mattei.load()
@@ -41,4 +48,11 @@ def test_buitenhuis():
     df = buitenhuis.load()
     with tempfile.TemporaryDirectory() as tmpdirname:
         df = buitenhuis.load(datadir=tmpdirname)
+    assert_dataframe(df)
+
+def test_mouw():
+    from oceandata.export_production import mouw
+    df = mouw.load()
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        df = mouw.load(datadir=tmpdirname)
     assert_dataframe(df)
