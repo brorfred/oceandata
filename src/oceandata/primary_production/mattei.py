@@ -63,6 +63,10 @@ def load(datadir=DATADIR,
         fstr = io.StringIO(string)
     df = pd.read_csv(fstr, sep="\t", parse_dates=True, index_col=0, 
                      dayfirst=True) 
+    #df2 = pd.read_csv(
+    # "https://download.pangaea.de/dataset/932417/files/Global_marine_phytoplankton_production_dataset.txt", engine="python",
+    #  on_bad_lines="skip", sep="\t", parse_dates=["Date"], index_col="Date", 
+    #  infer_datetime_format=True)
 
     [df.drop(columns=key, inplace=True) for key in df.keys() 
         if "magnitude" in key]
