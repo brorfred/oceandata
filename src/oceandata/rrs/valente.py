@@ -40,11 +40,11 @@ from ..chl.valente import DATADIR, download
 
 pathlib.Path(DATADIR).mkdir(parents=True, exist_ok=True)
 
-def load(datadir=DATADIR, filename="insitudb_rrs_satbands6.tab"):
+def load(datadir=DATADIR, filename="insitudb_rrs_satbands6_V3.tab"):
     """Load tab file and fix some columns"""
     fn = os.path.join(datadir, "datasets", filename)
     if not os.path.isfile(fn):
-        download(datadir=datadir, filename=filename)
+        download(datadir=datadir)
     with open(fn ,"r") as fH: 
         while 1: 
             line = fH.readline() 

@@ -68,7 +68,8 @@ def load(datadir=DATADIR, filename="insitudb_chla_V3.tab"):
 
 def download(version=3,
              params={"format":"zip"},
-             datadir=DATADIR):
+             datadir=DATADIR,
+             filename=None):
     """Download tsv file from Pangaea server
     Refs
     ----
