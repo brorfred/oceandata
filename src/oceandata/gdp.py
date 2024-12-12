@@ -54,7 +54,7 @@ def load(v1=None, sst=False, vel=False, var=False):
     elif v1 == 10001:
         v2 = 15000
     elif v1 == 15001:
-        v2 = "mar20"
+        v2 = "current"
     filename = os.path.join(DATADIR, f"buoydata_{v1}_{v2}.dat.gz")
     h5filename = filename[:-7] + ".h5"
     if os.path.isfile(h5filename):
@@ -87,7 +87,7 @@ def open_ftp_session(url="ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/"):
 def server_file_list(url="ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/", ftp=None):
     pass
 
-def download(url="ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/"):
+def download(url="ftp://ftp.aoml.noaa.gov/phod/pub/buoydata/", v1=1, v2=5000):
     """Download tsv file from NOOA's website using ftp"""
     lfn = filename = f"buoydata_{v1}_{v2}.dat.gz"
     ftp = open_ftp_session(url=url)
